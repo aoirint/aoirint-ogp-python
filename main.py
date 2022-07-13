@@ -1,12 +1,9 @@
-from typing import Optional
+from typing import Optional, Dict, List
 import requests
 from bs4 import BeautifulSoup
 from pydantic import BaseModel
 
-class Ogp(BaseModel):
-  image: Optional[str] = None
-
-def get_ogp(url: str):
+def get_ogp(url: str) -> Dict[str, List[str]]:
   headers = {
     'User-Agent': 'facebookexternalhit/1.1; aoirint-ogp-python/0.0.0',
   }
@@ -16,15 +13,20 @@ def get_ogp(url: str):
   html = res.text
   bs = BeautifulSoup(html, 'html5lib')
 
-  ogp = Ogp()
+  ogp_dict = {}
   for meta_tag in bs.select('meta'):
     prop = meta_tag.get('property')
     content = meta_tag.get('content')
 
-    if prop == 'og:image':
-      ogp.image = content
+    if prop is None:
+      continue
 
-  return ogp
+    if prop not in ogp_dict:
+      ogp_dict[prop] = []
+
+    ogp_dict[prop].append(content)
+
+  return ogp_dict
 
 
 if __name__ == '__main__':

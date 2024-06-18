@@ -24,7 +24,7 @@ soupsieve==2.3.2.post1
     # via beautifulsoup4
 typing-extensions==4.3.0
     # via pydantic
-urllib3==1.26.18
+urllib3==1.26.19
     # via requests
 webencodings==0.5.1
     # via html5lib
